@@ -119,3 +119,53 @@ Processing by UsersController#register as */*
 Completed 201 Created in 434ms (Views: 0.6ms | ActiveRecord: 92.0ms | Allocations: 7497)
 
 
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateTodos (20230323082534)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE "todos" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "title" varchar NOT NULL, "description" text NOT NULL, "status" integer DEFAULT 0 NOT NULL, "priority" integer DEFAULT 0 NOT NULL, "user_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_d94154aa95"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_todos_on_user_id" ON "todos" ("user_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20230323082534"]]
+  [1m[36mTRANSACTION (125.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started POST "/users" for 127.0.0.1 at 2023-03-23 12:05:16 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Error occurred while parsing request parameters.
+Contents:
+
+{
+  "username":"Lincoln"
+  "email":"linc@mail.com"
+  "Password":"12345678"
+}
+Processing by UsersController#register as */*
+Completed 400 Bad Request in 22ms (ActiveRecord: 0.0ms | Allocations: 2381)
+
+
+  
+ActionDispatch::Http::Parameters::ParseError (Error occurred while parsing request parameters):
+  
+app/controllers/users_controller.rb:38:in `user_params'
+app/controllers/users_controller.rb:6:in `register'
+Started POST "/users" for 127.0.0.1 at 2023-03-23 12:05:27 +0300
+Processing by UsersController#register as */*
+  Parameters: {"username"=>"Lincoln", "email"=>"linc@mail.com", "Password"=>"[FILTERED]", "user"=>{"username"=>"Lincoln", "email"=>"linc@mail.com"}}
+[31mUnpermitted parameters: :Password, :user. Context: { controller: UsersController, action: register, request: #<ActionDispatch::Request:0x00007f4f3f7d2b30>, params: {"username"=>"Lincoln", "email"=>"linc@mail.com", "Password"=>"[FILTERED]", "controller"=>"users", "action"=>"register", "user"=>{"username"=>"Lincoln", "email"=>"linc@mail.com"}} }[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/users_controller.rb:6:in `register'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."username" = ? LIMIT ?[0m  [["username", "Lincoln"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:6:in `register'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "linc@mail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:6:in `register'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/users_controller.rb:6:in `register'
+  [1m[36mUser Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."username" = ? LIMIT ?[0m  [["username", "Lincoln"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:7:in `register'
+  [1m[36mUser Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "linc@mail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:7:in `register'
+Completed 422 Unprocessable Entity in 73ms (Views: 43.4ms | ActiveRecord: 2.2ms | Allocations: 10431)
+
+
